@@ -129,7 +129,7 @@ int main() {
 
     cur_len = buildOffsetTable(arr);
     while (1) {
-    	printf("Enter line number until %lf seconds runs out : ", (double)TIMELIMIT / 1000);
+    	printf("Enter line number until %lf seconds runs out : \n", (double)TIMELIMIT / 1000);
 		if(lineNum = readLineNumLimit(arr)) == 0) {
 			break;
 		}
