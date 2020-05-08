@@ -41,7 +41,6 @@ int readLineNum() {
     int lineNum = -1;
     char term;
     //printf("Enter line number: ");
-
     if(scanf("%d%c", &lineNum, &term) != 2 || term != '\n') {
         while (errno == EINTR) {
             scanf("%d%c", &lineNum, &term);
