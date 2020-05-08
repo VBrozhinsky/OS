@@ -72,7 +72,6 @@ void printLine(int fd, int lineNum, cell_s *arr) {
 
 int main() {
 	cell_s arr[BUFFER_SIZE];
-	int fd = 0;
 	int cur_len;
 	int lineNum = 0;
 	

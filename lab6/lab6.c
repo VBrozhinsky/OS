@@ -55,6 +55,22 @@ int readLineNum() {
 	}
 	return lineNum;
 }
+
+void printAll(cell_s *arr){
+	for(int lineNum = 1; lineNum <= id; lineNum++){
+		char buf[BUFFER_SIZE];
+		if(lineNum != 0 && lineNum < id) {
+			lseek(fd, arr[lineNum].offset, 0);
+			read(fd, buf, arr[lineNum].length - 1);
+			if (errno == EINTR){
+				read(fd, buf, arr[lineNum].length - 1);
+			}
+			printf("%s\n", buf);
+			memset(buf, 0, BUFFER_SIZE);
+		}
+	}
+}
+
 int readLineNumLimit(cell_s *arr) {
 	int pollReturn;
 	struct pollfd fds;
@@ -94,24 +110,8 @@ void printLine(int lineNum, cell_s *arr) {
 		printf("Line number should be <= %d\n", id);
 }
 
-void printAll(cell_s *arr){
-	for(int i = 1; i <= id; i++){
-		char buf[BUFFER_SIZE];
-		if(lineNum != 0 && lineNum < id) {
-			lseek(fd, arr[lineNum].offset, 0);
-			read(fd, buf, arr[lineNum].length - 1);
-			if (errno == EINTR){
-				read(fd, buf, arr[lineNum].length - 1);
-			}
-			printf("%s\n", buf);
-			memset(buf, 0, BUFFER_SIZE);
-		}
-	}
-}
-
 int main() {
 	cell_s arr[BUFFER_SIZE];
-	int fd = 0;
 	int cur_len;
 	int lineNum = 0;
 	
@@ -125,12 +125,12 @@ int main() {
 		exit(1);
 	}
 	
-	cur_len = buildOffsetTable(arr, fd);
+	cur_len = buildOffsetTable(arr);
 	while ((lineNum = readLineNumLimit(arr)) != 0) {
 		if (lineNum == -1) {
 			continue;
 		}
-		printLine(fd, lineNum, arr);
+		printLine(lineNum, arr);
 	}
 	
 	if (close(fd)) {
