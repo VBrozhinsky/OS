@@ -1,0 +1,2 @@
+output:
+	gcc lab6.c -o lab6.exe
