@@ -136,7 +136,6 @@ int main() {
         if (lineNum == -1) {
             continue;
     	}
-        printf("\n");
         printLine(lineNum, arr);
     }
 
