@@ -62,7 +62,7 @@ int readLineNumLimit(cell_s *arr) {
 		printf("Enter line number until %lf seconds runs out : ", (double)TIMELIMIT / 1000);
 		fds.fd = STDIN_FILENO;
 		fds.events = POLLIN;
-		pollReturn = poll(&fds, 1, TIMEOUT);
+		pollReturn = poll(&fds, 1, TIMELIMIT);
 		if (errno == EINTR) {
 			continue;
 		}
