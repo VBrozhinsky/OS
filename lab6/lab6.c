@@ -74,6 +74,7 @@ int readLineNumLimit(cell_s *arr) {
 			printf("Time is up!");
 			printAll(arr);
 		}
+		return readNumber(numberOfLines);
 	} while (1);
 }
 
