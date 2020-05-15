@@ -24,7 +24,7 @@ int buildOffsetTable(char* fileMap, off_t fileMapSize, cell_s *arr) {
     int cur_len = 0;
     arr[id].offset = 0;
     while(1) {
-        if (i == fileMapSize || cur_len >= BUFFER_SIZE) {
+        if (id == fileMapSize || cur_len >= BUFFER_SIZE) {
 			break;
 		}
         cur_len++;
@@ -133,8 +133,8 @@ int main() {
         exit(1);
     }
     
-    fileMapSize = lseek(fileDescriptor, 0, SEEK_END);
-	fileMap = (char*) mmap(0, fileMapSize, PROT_READ, MAP_SHARED, fileDescriptor, 0);
+    fileMapSize = lseek(fd, 0, SEEK_END);
+	fileMap = (char*) mmap(0, fileMapSize, PROT_READ, MAP_SHARED, fd, 0);
 	if (fileMap == NULL) {
 		perror(strerror(errno));
 		if (close(fd)) {
@@ -144,7 +144,7 @@ int main() {
         exit(1);
 	}
 
-    cur_len = buildOffsetTable(arr);
+    cur_len = buildOffsetTable(fileMap, fileMapSize, arr);
     while (1) {
     	printf("Enter line number until %lf seconds runs out : \n", (double)TIMELIMIT / 1000);
 		if(lineNum = readLineNumLimit(arr)) == 0) {
@@ -153,7 +153,7 @@ int main() {
         if (lineNum == -1) {
             continue;
     	}
-        printLine(lineNum, arr);
+        printLine(fileMap, fileMapSize, lineNum, arr);
     }
 
 	if (munmap(fileMap, fileMapSize) == -1) {
