@@ -7,7 +7,7 @@
 
 int main() {
 	int status;
-	char *argv[] = { "cat", "task_9.c", '\0' };
+	char *argv[] = { "cat", "lab9.c", '\0' };
 
 	if(fork() == 0) {
 		if(execvp(argv[0], argv) == -1)
