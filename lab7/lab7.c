@@ -68,7 +68,7 @@ void printAll(char* fileMap, off_t fileMapSize, cell_s *arr){
     }
 }
 
-int readLineNumLimit(cell_s *arr) {
+int readLineNumLimit(char* fileMap, off_t fileMapSize, cell_s *arr) {
     int pollReturn;
     struct pollfd fds;
     fds.fd = STDIN_FILENO;
@@ -84,7 +84,7 @@ int readLineNumLimit(cell_s *arr) {
         }
         else if (pollReturn == 0) {
         	printf("\nTime is up!\n");
-            printAll(arr);
+            printAll(fileMap, fileMapSize, arr);
             if (close(fd)) {
                 perror("Closing file failed");
                 return -1;
@@ -147,7 +147,7 @@ int main() {
     cur_len = buildOffsetTable(fileMap, fileMapSize, arr);
     while (1) {
     	printf("Enter line number until %lf seconds runs out : \n", (double)TIMELIMIT / 1000);
-		if(lineNum = readLineNumLimit(arr)) == 0) {
+		if(lineNum = readLineNumLimit(fileMap, fileMapSize, arr)) == 0) {
 			break;
 		}
         if (lineNum == -1) {
