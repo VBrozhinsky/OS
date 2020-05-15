@@ -147,7 +147,7 @@ int main() {
     cur_len = buildOffsetTable(fileMap, fileMapSize, arr);
     while (1) {
     	printf("Enter line number until %lf seconds runs out : \n", (double)TIMELIMIT / 1000);
-		if(lineNum = readLineNumLimit(fileMap, fileMapSize, arr)) == 0) {
+		if((lineNum = readLineNumLimit(fileMap, fileMapSize, arr)) == 0) {
 			break;
 		}
         if (lineNum == -1) {
