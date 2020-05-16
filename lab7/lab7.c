@@ -15,25 +15,27 @@ int id = 1;
 int fd = 0;
 
 typedef struct cell_s {
-    int length;
-    off_t offset;
+    off_t length;
+    char* offset;
 } cell_s;
 
 int buildOffsetTable(char* fileMap, off_t fileMapSize, cell_s *arr) {
     char buf[2];
     int cur_len = 0;
-    arr[id].offset = 0;
+    arr[id].offset = fileMap;
+    int cnt = 0;
     while(1) {
         if (id == fileMapSize || cur_len >= BUFFER_SIZE) {
 			break;
 		}
         cur_len++;
-        if(fileMap[id] == '\n') {
+        if(*(fileMap + cnt) == '\n') {
             arr[id].length = cur_len;
-            arr[id + 1].offset = id;
+            arr[id + 1].offset = cnt + fileMap;
             id++;
-            cur_len = 0;
+            cur_len = 1;
         }
+        cnt++;
     }
     return cur_len;
 }
@@ -57,13 +59,8 @@ int readLineNum() {
 }
 
 void printAll(char* fileMap, off_t fileMapSize, cell_s *arr){
-	int length;
-	int startPos;
     for(int lineNum = 1; lineNum <= id; lineNum++){
-        length = arr[lineNum].offset; - arr[lineNum - 1].offset;;
-		startPos = 1 + arr[lineNum - 1].offset;
-	
-		write(STDOUT_FILENO, fileMap + startPos, sizeof(char) * length);
+        write(STDOUT_FILENO, arr[lineNum].offset, arr[lineNum].length);
 		printf("\n");
     }
 }
@@ -108,12 +105,14 @@ void printLine(char* fileMap, off_t fileMapSize, int lineNum, cell_s *arr) {
     }
     if(lineNum >= id)
     printf("Line number should be <= %d\n", id);*/
-    
-    int length = arr[lineNum].offset; - arr[lineNum - 1].offset;;
-	int startPos = 1 + arr[lineNum - 1].offset;
 	
-	write(STDOUT_FILENO, fileMap + startPos, sizeof(char) * length);
-	printf("\n");
+	if(lineNum != 0 && lineNum < id) {
+    	write(STDOUT_FILENO, arr[lineNum].offset, arr[lineNum].length);
+		printf("\n");
+    }
+    if(lineNum >= id)
+    	printf("Line number should be <= %d\n", id);
+	
 }
 
 int main() {
