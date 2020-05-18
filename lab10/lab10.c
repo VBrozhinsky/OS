@@ -6,16 +6,28 @@
 
 int main(int argc, char *argv[]) {
 	int status;
+	int forkRet;
 
-	if(fork() == 0) {
-		if(execvp(argv[1], &argv[1]) == -1){
-			perror(argv[1]);
-		}
-		exit(222);
+	if((forkRet = fork()) == 0) {
+		execvp(argv[1], &argv[1]);
+		perror(argv[1]);
+		exit(1);
+	}
+	else if(forkRet == -1) {
+		perror("Creating a new process was failed!");
+		exit(1);
 	}
 	else {
 		wait(&status);
-		printf("Child process exit status: %d\n", WEXITSTATUS(status));
+		if(WIFSIGNALED(status)) {
+			printf("child process terminated due to the signal receipt of a signal\n");
+			exit(1);
+		}
+		if(WIFEXITED(status)) {
+			printf("Child process finished with status: %d\n", WEXITSTATUS(status));
+			printf("I am parent process!\n");
+			exit(1);
+		}		
 	}
 
 	return 0;
