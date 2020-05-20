@@ -25,7 +25,7 @@ int main() {
                 while(1) {
                         waitid(P_ALL, 0, &status1, WNOWAIT);
                         if(WIFSIGNALED(status)) {
-                                printf("child process terminated due to the signal receipt of a signal\n");
+                                printf("Child process terminated due to the signal\n");
                                 system("ps -eo pid,user,command,stat");
                                 exit(1);
                         }

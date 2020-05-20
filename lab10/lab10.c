@@ -20,7 +20,7 @@ int main(int argc, char *argv[]) {
 	else {
 		wait(&status);
 		if(WIFSIGNALED(status)) {
-			printf("child process terminated due to the signal receipt of a signal\n");
+			printf("Child process terminated due to the signal\n");
 			exit(1);
 		}
 		if(WIFEXITED(status)) {

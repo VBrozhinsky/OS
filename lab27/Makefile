@@ -1,0 +1,2 @@
+output:
+	gcc lab27.c -o lab27.exe
