@@ -34,8 +34,11 @@ int main() {
 	}
 	
 	status = pclose(out);
-	if(WIFEXITED(status)) {
-		printf("Child process 2 finished with status: %d\n", WEXITSTATUS(status));
+	if(status == -1){
+		perror(strerror(errno));
+	}
+	else if(WIFEXITED(status)) {
+		printf("Child process finished with status: %d\n", WEXITSTATUS(status));
 	}
 
 	return 0;

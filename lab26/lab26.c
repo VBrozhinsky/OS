@@ -36,11 +36,17 @@ int main() {
 	
 	status1 = pclose(in);
 	status2 = pclose(out);
-
-	if(WIFEXITED(status1)) {
+	
+	if(status1 == -1){
+		perror(strerror(errno));
+	}
+	else if(WIFEXITED(status1)) {
 		printf("Child process 1 finished with status: %d\n", WEXITSTATUS(status1));
 	}
-	if(WIFEXITED(status2)) {
+	if(status2 == -1){
+		perror(strerror(errno));
+	}
+	else if(WIFEXITED(status2)) {
 		printf("Child process 2 finished with status: %d\n", WEXITSTATUS(status2));
 	}
 		 	

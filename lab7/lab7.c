@@ -51,9 +51,9 @@ int readLineNum() {
         printf("Integer value required!\n");
         if (close(fd)) {
             perror("Closing file failed");
-                return -1;
+            return -1;
         }
-            exit(1);
+        exit(1);
     }
     return lineNum;
 }
