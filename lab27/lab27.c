@@ -3,43 +3,33 @@
 #include <sys/wait.h>
 #include <unistd.h>
 #include <string.h>
+#include <errno.h>
 
 #define BUFFERSIZE 66
 
 int main() {
-	FILE *in, *out;
-	char buf[BUFFERSIZE];
-	static int status;
-	
-	if((in = fopen("text.txt", "r")) == NULL) {
-		perror("Cannot open file");
-		exit(1);
-	}
+        FILE *in;
+        char buf[BUFFERSIZE];
+        static int status;
 
-	if((out = popen("wc -l", "w")) == NULL) {
-		perror("Cannot create child process");
-		exit(-1);
-	}
-	else {
-		while(fgets(buf, BUFFERSIZE, in) != (char *)NULL) {
-			if(strcmp(buf, "\n") == 0) {
-				fputs(buf, out);
-			}
-		}
-	}
-	
-	if((fclose(in) == -1) {
-		perror("Cannot close file");
-		exit(1);
-	}
-	
-	status = pclose(out);
-	if(status == -1){
-		perror(strerror(errno));
-	}
-	else if(WIFEXITED(status)) {
-		printf("Child process finished with status: %d\n", WEXITSTATUS(status));
-	}
+        if((in = popen("cat text.txt | grep '^$' | wc -l", "r")) == NULL) {
+                perror("Cannot create child process");
+                exit(-1);
+        }
 
-	return 0;
+        fgets(buf, BUFFERSIZE, in);
+
+        status = pclose(in);
+        if(status == -1){
+                perror(strerror(errno));
+        }
+        else if(WIFEXITED(status)) {
+                printf("Child process finished with status: %d\n", WEXITSTATUS(status));
+                if(status == 0){
+                        printf("%s", buf);
+                }
+        }
+
+        return 0;
 }
+
